@@ -1,0 +1,127 @@
+<!-- HTML code for the banner -->
+<div id="cookie-banner" style="display:none;">
+  <p>This website uses cookies to ensure you get the best experience on our website. </p>
+  <button id="accept-all">Accept All</button>
+  <button id="necessary">Necessary</button>
+  <button id="reject-all">Reject All</button>
+</div>
+
+<style>
+#cookie-banner {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background-color: #f2f2f2;
+  padding: 10px;
+  display: none;
+  z-index: 999;
+  margin: auto;
+  width: fit-content;
+  text-align: center;
+}
+#cookie-buttons {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: center;
+  gap: 10px;
+}
+#cookie-buttons button {
+  padding: 5px 10px;
+  background-color: #007bff;
+  color: #fff;
+  border: none;
+  cursor: pointer;
+}
+#cookie-buttons button:hover {
+  opacity: 0.8;
+}
+#cookie-buttons button:focus {
+  outline: none;
+}
+#cookie-buttons button:active {
+  transform: translateY(1px);
+}
+#cookie-buttons button.necessary {
+  background-color: #ccc;
+}
+</style>
+
+<script>
+  // Function to set a cookie
+  function setCookie(name, value, days) {
+    var expires = "";
+    if (days) {
+      var date = new Date();
+      date.setTime(date.getTime() + (days * 24 * 60 * 60 * 1000));
+      expires = "; expires=" + date.toUTCString();
+    }
+    document.cookie = name + "=" + (value || "")  + expires + "; path=/";
+  }
+
+  // Function to get a cookie
+  function getCookie(name) {
+    var nameEQ = name + "=";
+    var ca = document.cookie.split(';');
+    for(var i=0;i < ca.length;i++) {
+      var c = ca[i];
+      while (c.charAt(0)==' ') c = c.substring(1,c.length);
+      if (c.indexOf(nameEQ) == 0) return c.substring(nameEQ.length,c.length);
+    }
+    return null;
+  }
+
+  // Function to check if a user has given consent previously
+  function checkConsent() {
+    var consent = getCookie("cookie_consent");
+    if (consent === "true") {
+      // User has given consent previously, hide the banner
+      document.getElementById("cookie-banner").style.display = "none";
+    } else if (consent === "false") {
+      // User has rejected cookies previously, hide the banner
+      document.getElementById("cookie-banner").style.display = "none";
+    } else {
+      // User has not given consent previously, show the banner
+      document.getElementById("cookie-banner").style.display = "block";
+    }
+  }
+
+  // Function to handle user's consent selection
+  function handleConsent(selection) {
+    if (selection === "accept-all") {
+      // User has accepted all cookies
+      setCookie("cookie_consent", "true", 365);
+      document.getElementById("cookie-banner").style.display = "none";
+      // Enable all cookies here
+    } else if (selection === "necessary") {
+      // User has accepted necessary cookies only
+      setCookie("cookie_consent", "true", 365);
+      document.getElementById("cookie-banner").style.display = "none";
+      // Enable necessary cookies here
+    } else if (selection === "reject-all") {
+      // User has rejected all cookies
+      setCookie("cookie_consent", "false", 365);
+      document.getElementById("cookie-banner").style.display = "none";
+      // Disable all cookies here
+    }
+  }
+
+  // Check if user has given consent previously
+  checkConsent();
+
+  // Attach event listener to accept all button
+  document.getElementById("accept-all").addEventListener("click", function() {
+    handleConsent("accept-all");
+  });
+
+  // Attach event listener to necessary button
+  document.getElementById("necessary").addEventListener("click", function() {
+    handleConsent("necessary");
+  });
+
+  // Attach event listener to reject all button
+  document.getElementById("reject-all").addEventListener("click", function() {
+    handleConsent("reject-all");
+  });
+</script>
